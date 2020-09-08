@@ -28,26 +28,51 @@ t11 = (0,11,0)
 t12 = (0,12,0)
 t13 = (0,13,0)
 t14 = (0,14,0)
+t15 = (0,15,0)
+t16 = (0,16,0)
+t17 = (0,17,0)
+t18 = (0,18,0)
 
-x = 1
-y = 1
+x = 3
+y = 6
 
 stopwatch.restart()
 
 maze1 = [[r,r,r,r,r,r,r,r],
+         [r,b,b,b,r,b,b,t1],
+         [r,b,r,b,r,b,r,r],
+         [r,b,r,b,r,b,b,r],
+         [r,b,r,b,b,b,r,r],
+         [r,b,r,b,r,r,r,r],
+         [r,b,r,b,r,b,b,r],
+         [r,t2,r,r,r,r,t3,r]]
+
+maze2 = [[r,r,r,r,r,r,r,r],
+         [t4,b,r,r,b,b,b,r],
+         [r,b,b,r,b,r,b,r],
+         [r,b,b,r,r,r,b,r],
          [r,b,b,b,b,b,b,r],
-         [r,b,b,b,b,b,b,r],
-         [r,b,b,b,b,b,b,r],
-         [r,b,b,b,b,b,b,r],
-         [r,b,b,b,b,b,b,r],
-         [r,b,b,b,b,b,b,r],
+         [r,b,r,r,r,r,b,r],
+         [r,b,b,r,b,r,b,r],
+         [r,r,t5,r,t6,r,t7,r]]
+
+maze3 = [[r,t8,r,r,r,r,t9,r],
+         [r,b,b,b,b,r,b,t10],
+         [r,r,r,r,b,r,r,r],
+         [r,b,g,r,b,r,b,t11],
+         [r,b,r,r,r,r,b,r],
+         [r,b,b,b,b,r,r,r],
+         [r,b,r,r,b,b,b,t12],
          [r,r,r,r,r,r,r,r]]
 
-maze2 = 
-
-maze3 = 
-
-maze4 = 
+maze4 = [[r,r,t13,r,t14,r,t15,r],
+         [t16,b,b,b,b,r,b,r],
+         [r,r,r,r,r,r,b,r],
+         [t17,b,b,b,r,b,b,r],
+         [r,b,b,b,b,b,b,r],
+         [r,r,r,r,r,b,r,r],
+         [t18,b,b,b,b,b,b,r],
+         [r,r,r,r,r,r,r,r]]
 
 maze = maze1
 
@@ -86,68 +111,88 @@ while game_over == False:
         x = 1
         y = 1
     if maze[y][x] == t2:
-        maze = maze2
+        maze = maze3
         x = 1
-        y = 5
+        y = 1
     if maze[y][x] == t3:
         maze = maze3
-        x = 3
+        x = 6
         y = 1
         sense.clear()
     if maze[y][x] == t4:
-        maze = maze3
+        maze = maze1
         x = 6
         y = 1
         sense.clear()
     if maze[y][x] == t5:
-        maze = maze1
-        x = 6
+        maze = maze4
+        x = 2
         y = 1
         sense.clear()
     if maze[y][x] == t6:
-        maze = maze1
-        x = 6
-        y = 5
+        maze = maze4
+        x = 4
+        y = 1
         sense.clear()
     if maze[y][x] == t7:
         maze = maze4
-        x = 1
+        x = 6
         y = 1
         sense.clear()
     if maze[y][x] == t8:
-        maze = maze4
-        x = 6
-        y = 1
+        maze = maze1
+        x = 1
+        y = 6
         sense.clear()
     if maze[y][x] == t9:
         maze = maze1
-        x = 3
+        x = 6
         y = 6
         sense.clear()
     if maze[y][x] == t10:
-        maze = maze1
-        x = 6
-        y = 6
+        maze = maze4
+        x = 1
+        y = 1
         sense.clear()
     if maze[y][x] == t11:
         maze = maze4
         x = 1
-        y = 4
+        y = 3
         sense.clear()
     if maze[y][x] == t12:
-        maze = maze2
+        maze = maze4
         x = 1
         y = 6
         sense.clear()
     if maze[y][x] == t13:
         maze = maze2
-        x = 6
+        x = 2
         y = 6
         sense.clear()
     if maze[y][x] == t14:
+        maze = maze2
+        x = 4
+        y = 6
+        sense.clear()
+    if maze[y][x] == t15:
+        maze = maze2
+        x = 6
+        y = 6
+        sense.clear()
+    if maze[y][x] == t16:
         maze = maze3
         x = 6
-        y = 4
+        y = 1
+        sense.clear()
+    if maze[y][x] == t17:
+        maze = maze3
+        x = 6
+        y = 3
+        sense.clear()
+    if maze[y][x] == t18:
+        maze = maze3
+        x = 6
+        y = 6
         sense.clear()
     if maze[y][x] == g:
         sense.show_message("win")
@@ -172,4 +217,5 @@ while not game_over:
     sleep(0.05)
     maze[y][x] = b
     
+
 
