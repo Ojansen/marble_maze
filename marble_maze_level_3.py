@@ -177,7 +177,8 @@ while game_over == False:
         score = round(score, 1)
         sense.show_message("score")
         sense.show_message(str(score))
-        #exit script
+        #send score to database
+        #exit()
         game_over = True
     maze[y][x] = w
     sense.set_pixels(sum(maze,[]))
