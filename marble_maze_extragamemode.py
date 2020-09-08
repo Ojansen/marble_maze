@@ -6,6 +6,7 @@ from time import sleep
 from signal import signal, SIGTERM
 from stopwatch import Stopwatch
 stopwatch = Stopwatch()
+stopwatch.start()
 
 def sigterm(signum, frame):
     raise SystemExit(0)
@@ -27,7 +28,10 @@ def main():
             inputs = moves(hat.imu)
             outputs = game(maze, colors, inputs)
             display(hat.screen, outputs)
-            stopwatch.start()
+            
+            maze1 = generate_maze1(width, height, colors)
+            outputs1 = game1(maze1, colors, inputs)
+            display(hat.screen, outputs1)
 
 
 
@@ -70,7 +74,7 @@ def game(maze, colors, moves):
             y += delta_y
             x += delta_x
             if Color(*maze[y, x]) == colors['goal']:
-                yield from winners_cup()
+                #yield from game1(maze1, colors, moves)
                 break
             else:
                 maze[y, x] = colors['ball']
@@ -79,6 +83,27 @@ def game(maze, colors, moves):
                 yield 'show', maze[top:bottom, left:right]
     yield 'fade', ps.array(Color('black'))
 
+def game1(maze1, colors, moves):
+    height, width = maze1.shape
+    y, x = (1, 1)
+    maze1[y, x] = colors['ball']
+    left, right = clamp(x, width)
+    top, bottom = clamp(y, height)
+    yield 'fade', maze1[top:bottom, left:right]
+    for delta_y, delta_x in moves:
+        if Color(*maze1[y + delta_y, x + delta_x]) != colors['wall']:
+            maze1[y, x] = colors['visited']
+            y += delta_y
+            x += delta_x
+            if Color(*maze1[y, x]) == colors['goal']:
+                yield from winners_cup()
+                break
+            else:
+                maze1[y, x] = colors['ball']
+                left, right = clamp(x, width)
+                top, bottom = clamp(y, height)
+                yield 'show', maze1[top:bottom, left:right]
+    yield 'fade', ps.array(Color('black'))
 
 def generate_maze(width, height, colors):
     walls = generate_walls(width, height)
@@ -98,6 +123,25 @@ def generate_maze(width, height, colors):
     maze[-1, :] = maze[:, -1] = colors['wall']
     maze[-2, -2] = colors['goal']
     return maze
+
+def generate_maze1(width, height, colors):
+    walls = generate_walls(width, height)
+    maze1 = ps.array(shape=(2 * height + 1, 2 * width + 1))
+    maze1[...] = colors['unvisited']
+    maze1[::2, ::2] = colors['wall']
+    for a, b in walls:
+        ay, ax = a
+        by, bx = b
+        y = 2 * by + 1
+        x = 2 * bx + 1
+        if ay == by:
+            maze1[y, x - 1] = colors['wall']
+        else:
+            maze1[y - 1, x] = colors['wall']
+    maze1[0, :] = maze1[:, 0] = colors['wall']
+    maze1[-1, :] = maze1[:, -1] = colors['wall']
+    maze1[-2, -2] = colors['goal']
+    return maze1
 
 
 def generate_walls(width, height):
