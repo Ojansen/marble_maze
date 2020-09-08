@@ -4,6 +4,8 @@ import time
 from datetime import datetime
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
+from stopwatch import Stopwatch
+stopwatch = Stopwatch()
 
 sense = SenseHat()
 sense.clear()
@@ -30,6 +32,8 @@ t14 = (0,14,0)
 x = 1
 y = 1
 
+stopwatch.restart()
+
 maze1 = [[r,r,r,r,r,r,r,r],
         [r,b,b,b,b,b,b,t1],
         [r,b,r,b,r,r,r,r],
@@ -50,7 +54,7 @@ maze2 = [[r,r,r,r,r,r,r,r],
 
 maze3 = [[r,r,r,t9,r,r,t10,r],
          [r,b,b,b,r,r,b,r],
-         [r,b,r,r,b,r,b,r],
+         [r,b,r,r,r,r,b,r],
          [r,b,r,r,b,r,r,r],
          [r,b,r,r,b,b,b,t11],
          [r,b,g,r,b,r,b,r],
@@ -58,9 +62,9 @@ maze3 = [[r,r,r,t9,r,r,t10,r],
          [r,r,r,r,r,r,r,r]]
 
 maze4 = [[r,t12,r,r,r,r,t13,r],
-         [r,b,r,b,b,r,b,r],
+         [r,b,r,r,b,r,b,r],
          [r,b,b,r,b,r,b,r],
-         [r,r,r,r,b,b,r,r],
+         [r,r,r,r,b,r,r,r],
          [t14,b,b,r,b,b,b,r],
          [r,b,r,r,r,r,b,r],
          [r,b,b,b,b,b,b,r],
@@ -133,13 +137,13 @@ while game_over == False:
         sense.clear()
     if maze[y][x] == t8:
         maze = maze4
-        x = 1
-        y = 6
+        x = 6
+        y = 1
         sense.clear()
     if maze[y][x] == t9:
         maze = maze1
-        x = 6
-        y = 3
+        x = 3
+        y = 6
         sense.clear()
     if maze[y][x] == t10:
         maze = maze1
@@ -148,13 +152,13 @@ while game_over == False:
         sense.clear()
     if maze[y][x] == t11:
         maze = maze4
-        x = 4
-        y = 1
+        x = 1
+        y = 4
         sense.clear()
     if maze[y][x] == t12:
         maze = maze2
-        x = 6
-        y = 1
+        x = 1
+        y = 6
         sense.clear()
     if maze[y][x] == t13:
         maze = maze2
@@ -168,8 +172,11 @@ while game_over == False:
         sense.clear()
     if maze[y][x] == g:
         sense.show_message("win")
-        #sense.show_message
-        #timer en highscore systeem
+        stopwatch.stop()
+        score = stopwatch.duration
+        score = round(score, 1)
+        sense.show_message("score")
+        sense.show_message(str(score))
         #exit script
         game_over = True
     maze[y][x] = w
