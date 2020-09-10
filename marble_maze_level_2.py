@@ -7,6 +7,12 @@ current_time = now.strftime("%H:%M:%S")
 from stopwatch import Stopwatch
 stopwatch = Stopwatch()
 
+#from importlib import reload
+#reload('marble_maze_menu.py')
+
+#un-import menu
+from importlib import reload  
+
 sense = SenseHat()
 sense.clear()
 
@@ -69,7 +75,7 @@ while game_over == False:
         sense.show_message(str(score))
         #send score to database
         #exit()
-        game_over = True
+        game_over = 2
     maze[y][x] = w
     sense.set_pixels(sum(maze,[]))
     sleep(0.05)
@@ -82,7 +88,8 @@ while not game_over:
     sense.set_pixels(sum(maze,[]))
     sleep(0.05)
     maze[y][x] = b
-    
-
-
-
+while game_over == 2:
+    import marble_maze_menu.py
+    execfile('marble_maze_menu.py')
+    exit(1)
+       

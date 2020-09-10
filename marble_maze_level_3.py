@@ -28,7 +28,7 @@ class MazePhysics:
             new_x += 1
         if 1 < roll < 179 and y != 7:
             new_y += 1
-        elif 359 >r oll > 181 and y != 0:
+        elif 359 > roll > 181 and y != 0:
             new_y -= 1
         new_x, new_y = self.check_wall(x, y, new_x, new_y)
         return new_x, new_y

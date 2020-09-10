@@ -76,7 +76,7 @@ def move_middle(event):
                     import marble_maze_level_1_old.py
                     print ("3")
                     execfile('marble_maze_level_1_old.py')
-                    exit(1)
+                    restart()
                     
 sense.stick.direction_up = move_up
 sense.stick.direction_down = move_down
