@@ -1,14 +1,9 @@
 from sense_hat import SenseHat
 from time import sleep
+import time
 from lib.constants import maze1, maze2
 from lib.send_score import create_post
 
-
-r = (255,0,0)
-b = (0,0,0)
-w = (255,255,255)
-g = (0,255,0)
-v = (30,80,30)
 
 x = 1
 y = 1
@@ -17,13 +12,18 @@ sense.clear()
 maze_num = int(1)
 selected_maze = None
 mazes = [maze1, maze2]
-lives = 3
+lives = 5
 
 
 def select_maze():
     global maze_num
     global selected_maze
-    maze_num = int(input("Selecteer een nummer 1, 2, 3 > "))
+    maze_num = input("Selecteer een nummer 1 ... 3 or exit with q > ")
+    if maze_num == "q":
+        sense.clear()
+        exit(1)
+    else:
+        maze_num = int(maze_num)
     selected_maze = mazes[maze_num - 1]
     return mazes[maze_num - 1]
 
@@ -47,6 +47,9 @@ class MazePhysics:
         return new_x, new_y
 
     def check_wall(self, x, y, new_x, new_y):
+        global lives
+        v = (255, 0, 255)
+        r = (255, 0, 0)
         if self.maze[new_y][new_x] != r:
             return new_x, new_y
         elif self.maze[new_y][new_x] != r:
@@ -56,37 +59,49 @@ class MazePhysics:
         else:
             return x, y
 
-    def check_pit(self, new_x, new_y):
+    def check_pit(self, x, y):
         global lives
-        if self.maze[new_y][new_x] == v:
+        global selected_maze
+        v = (255, 0, 255)
+        if self.maze[x][y] == v:
+            sense.set_pixels(sum(selected_maze, []))
             lives -= 1
-            print(lives)
+            print("valkuil")
+            main(selected_maze)
+        # print(x, y, self.maze[x][y], lives)
 
 
 if __name__ == "__main__":
     def main(maze):
         physics = MazePhysics(maze=maze)
         game_over = False
-        r = (255, 0, 0)
+        name = None
+
         b = (0, 0, 0)
         w = (255, 255, 255)
         g = (0, 255, 0)
 
         x = 1
         y = 1
-        name = None
         while not game_over:
+            start_time = time.time()
             o = sense.get_orientation()
             pitch = o["pitch"]
             roll = o["roll"]
             x, y = physics.move_marble(pitch, roll, x, y)
             physics.check_pit(x, y)
-            if maze[y][x] == g or lives == 0:
+            if maze[y][x] == g:
                 sense.show_message("win")
                 game_over = True
+                end_time = time.time()
+                total_time = round(end_time - start_time, 2)
                 name = input("What is you name: ")
-                create_post(player_name=name, level='str(maze)', tries=lives, score='00:01:30')
-                print('je score is gepost naar http://167.172.37.168/highscores')
+                create_post(player_name=name, level=maze_num, tries=lives - 5, score=total_time)
+                print('je score is gepost naar http://167.172.37.168/')
+                restart()
+            elif lives == 0:
+                sense.show_message("GAME OVER")
+                game_over = True
                 restart()
             maze[y][x] = w
             sense.set_pixels(sum(maze, []))
@@ -97,13 +112,14 @@ if __name__ == "__main__":
             pitch = sense.get_orientation()["pitch"]
             roll = sense.get_orientation()["roll"]
             x, y = physics.move_marble(pitch, roll, x, y)
+            physics.check_pit(x, y)
             maze[y][x] = w
             sense.set_pixels(sum(maze, []))
             sleep(0.05)
             maze[y][x] = b
 
     def restart():
-        game = main(maze=select_maze())
+        main(maze=select_maze())
 
     # select_maze()
     restart()
